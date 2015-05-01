@@ -1,0 +1,18 @@
+<!--
+<?php
+$id = $_GET['id'];
+$pdo = new PDO("mysql:host=localhost; dbname=rorensu",'root','pass');
+$stmt = $pdo->query("SELECT * FROM Hmonsters where id = $id");
+$usr = $pdo->query("SELECT * FROM member where id = $id");
+$usrNamearray = $usr->fetchAll();
+$usrName = $usrNamearray[0]['name'];
+echo "<div id='Hmonsters'><table border=1><tr><th>297モンスター一覧</th></tr>";
+while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+	echo "<tr><td>";
+	echo($row['name']);
+	echo($row['commentf']);
+	echo "</td></tr>";
+}
+echo "</table>";
+?>
+-->

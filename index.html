@@ -1,0 +1,140 @@
+<html>
+<head>
+	<title>データベースソフトウェア</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="st.css">
+</head>
+
+<script type="text/javascript">
+	document.addEventListener( 'DOMContentLoaded', function(){
+		/*******************************************
+		DOM.AddEventListener 一覧
+		********************************************/
+		document.getElementById("dbCreate").addEventListener('click', createTable);
+		document.getElementById("dbDelete").addEventListener('click', deleteTable);
+		document.getElementById("addButton").addEventListener('click', addData);
+		//document.addEventListener('click',showData);
+		showData();
+
+
+	}, false );
+
+	/*******************************************
+	DataBase Function 一覧 
+	********************************************/
+	//テーブルの作成
+	function createTable(){
+		var makeReq = new XMLHttpRequest();
+		makeReq.open( "GET", 'dbCreate.php', true );
+		makeReq.send( null );
+		messages("データベースを作成しました");
+	}
+	//テーブルの削除
+	function deleteTable(){
+		var delReq = new XMLHttpRequest();
+		delReq.open( "GET", 'dbDelete.php', true );
+		delReq.send( null );
+		messages("データベースを削除しました");
+	}
+	//新規データ追加
+	function addData(){
+		var newdata = 'name=' + document.getElementById('addName').value + '& rank=' + document.getElementById('addRank').value + '& hyper=' +document.getElementById('addHyper').value + '& comment=' + document.getElementById('addComment').value;
+		var addRequest = new XMLHttpRequest();
+		addRequest.onreadystatechange=function(){
+			if (addRequest.readyState==4 && addRequest.status==200){
+				messages(addRequest.responseText);
+			}
+		}
+		addRequest.open( "POST", 'add.php', true );
+		addRequest.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		addRequest.send( newdata );
+	}
+	//データ一覧表示
+	function showData(){
+		var showRequest = new XMLHttpRequest();
+		showRequest.onreadystatechange=function(){
+			if (showRequest.readyState==4 && showRequest.status==200){
+				var obj = JSON.parse(showRequest.responseText);
+				var showTable = document.getElementById('showTable');
+				showTable.innerHTML="<tr><th>会員番号</th><th>名前</th><th>ランク</th><th>297</tr>";
+				for(var i = 0;i<obj.length;i++){
+					var tr = document.createElement('tr');
+
+					var td0 = document.createElement('td');
+					td0.innerHTML=obj[i]['id'];
+					tr.appendChild(td0);
+
+					var td1 = document.createElement('td');
+					td1.innerHTML="<a href='mypage/mypage.php?id="+obj[i]['id']+"'>" + obj[i]['name'] + "</a>";
+					tr.appendChild(td1);
+
+					var td2 = document.createElement('td');
+					td2.innerHTML=obj[i]['rank'];
+					tr.appendChild(td2);
+					
+					var td3 = document.createElement('td');
+					td3.innerHTML=obj[i]['hyper'];
+					tr.appendChild(td3);
+
+					showTable.appendChild(tr);
+				}
+			}
+		}
+
+		showRequest.open( "POST", 'dbShow.php', true );
+		showRequest.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		showRequest.send( null );
+	}
+
+	/*******************************************
+	その他関数一覧
+	********************************************/
+	function messages(messagetext){
+		document.getElementById("message").innerHTML=messagetext;
+		showData();
+	}
+
+</script>
+<body>
+	<!--システムログ-->
+	<div id="message">システムテキスト</div>
+	<!--データベースの追加と削除フォーム-->
+	<div id="base">
+		データベースの作成と削除<br />
+		<input type="button" id="dbCreate" value="dbCreate.php">
+		<input type="button" id="dbDelete" value="dbDelete.php">
+	</div>
+	<!--追加データ記入場-->
+	<div id="addData">
+		新規ユーザー登録<br />
+		名前<input type="text" id="addName"><br />
+		rank<input type="text" id="addRank"><br />
+		所持297<input type="text" id="addHyper"><br />
+		自由コメント<input type="text" id="addComment"><br />
+		<input type="button" id="addButton" value="データ追加"><br />
+	</div>
+	<!--データベース検索-->
+	<div id="searchData">
+		メンバー検索<br />
+		id<input type="text" id="addName"><br />
+		名前<input type="text" id="addName"><br />
+		rank<input type="text" id="addRank"><br />
+		所持297<input type="text" id="addHyper"><br />
+		自由コメント<input type="text" id="addComment"><br />
+		<input type="button" id="addButton" value="データ追加"><br />
+	</div>
+	<!--データベースのデータ表示欄-->
+	<div id="showDatabase">
+		<div id="showMode">
+			表示形式を選択してください
+		</div>
+		<div id="tableZone">
+			<table border="1" id="showTable">
+				<tr><th>会員番号</th><th>名前</th><th>ランク</th><th>297</th></tr>
+				
+			</table>
+		</div>
+	</div>
+
+</body>
+</html>
