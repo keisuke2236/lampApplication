@@ -8,6 +8,7 @@
 	left:0px;
 	width:100%;
 	background:gray;
+	color:white;
 	margin:center;
 }
 #base{
@@ -20,6 +21,13 @@
 #addData{
 	position:absolute;
 	top:90px;
+	left:0px;
+	width:50%;
+	background:silver;
+}
+#delData{
+	position:absolute;
+	top:250px;
 	left:0px;
 	width:50%;
 	background:silver;

@@ -5,8 +5,9 @@ $usr = $pdo->query("SELECT * FROM member where id = $id");
 $usrNamearray = $usr->fetchAll();
 $usrName = $usrNamearray[0]['name'];
 $usrComment = $usrNamearray[0]['comment'];
-$stmt = $pdo->query("SELECT * FROM Hmonsters where id = $id");
 
+//297モンスター一覧の取得
+$stmt = $pdo->query("SELECT * FROM Hmonsters where id = $id");
 ?>
 
 <html>
@@ -17,6 +18,7 @@ $stmt = $pdo->query("SELECT * FROM Hmonsters where id = $id");
 <script type='text/javascript'>
 	document.addEventListener( 'DOMContentLoaded', function(){
 		document.getElementById('add297button').addEventListener('click', add297func);
+		document.getElementById('del297button').addEventListener('click', del297func);
 	});
 	
 
@@ -32,29 +34,49 @@ $stmt = $pdo->query("SELECT * FROM Hmonsters where id = $id");
 		addRequest.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		addRequest.send( newdata );
 	}
+
+	function del297func(){
+		var deldata = 'name=' + document.getElementById('del297').value + '& id=' + <?php echo $id; ?>;
+		var delRequest = new XMLHttpRequest();
+		delRequest.onreadystatechange=function(){
+			if (delRequest.readyState==4 && delRequest.status==200){
+				console.log(delRequest.responseText);
+				location.reload();
+			}
+		}
+		delRequest.open( 'POST', 'delete.php', true );
+		delRequest.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		delRequest.send( deldata );
+
+	}
 </script>
 
 <body>	
+	<hr>
 	<p align='center'>
 		<font size='5'>
 			<?php echo $usrName; ?>さんの個人ページ
-			<a href='../index.html'>
-				戻る
-			</a>
 		</font>
 	</p>
-	<div id='Hmonsters'><table border=1><tr><th>297モンスター一覧</th></tr>
-	<?php
-	while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-		echo "<tr><td>";
-		echo($row['name']);
-		echo "</td></tr>";
-	}
-	echo "</table>";
-	?>
-	<input type='text' id='add297' />
-	<input type='button' value='297追加' id='add297button'>
+	<hr>
+	<p align="right"><a href='../index.html'>戻る</a></p>
+	<div id='Hmonsters'><table border=1><tr><th style="width:300px">297モンスター一覧</th></tr>
+		<?php
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+			echo "<tr><td>";
+			echo($row['name']);
+			echo "</td></tr>";
+		}
+		echo "</table>";
+		?>
+		<input type='text' id='add297' size=40 />
+		<input type='button' value='297追加' id='add297button'>
+		<input type='text' id='del297' size=40 />
+		<input type='button' value='削除' id='del297button'>
 	</div>
+
+	
+
 	<div id='free'>
 		自由記入欄<br />
 		<?php echo $usrComment; ?>

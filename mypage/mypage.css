@@ -2,12 +2,12 @@
 	position:absolute;
 	top:100px;
 	left:0px;
+	width:300px;
 	background:gold;
-	
 }
 #free{
 	position:absolute;
 	top:100px;
-	left:50%;
-	background:silver;
+	left:300px;
+	background:orange;
 }
